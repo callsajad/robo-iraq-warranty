@@ -1,33 +1,182 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>روبو عراق - نظام الضمان</title>
+
+<style>
+body{
+    font-family:Tahoma,Arial,sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+
+.card{
+    max-width:1000px;
+    margin:auto;
+    background:white;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 0 15px rgba(0,0,0,.1);
+}
+
+.logo{
+    text-align:center;
+}
+
+.logo img{
+    width:120px;
+}
+
+h1,h2{
+    text-align:center;
+}
+
+.info{
+    background:#fafafa;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+table th,
+table td{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+table th{
+    background:#eee;
+}
+
+.footer{
+    margin-top:30px;
+}
+
+a{
+    text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="logo">
+<img src="logo.png" alt="Robo Iraq">
+</div>
+
+<h1>شركة روبو عراق للمكانس الذكية</h1>
+<h2>اشتري راحتك ويانة</h2>
+
+<div class="info">
+<p><strong>اسم العميل:</strong> <span id="customer_name">جاري التحميل...</span></p>
+
+<p><strong>نوع الجهاز:</strong> <span id="device_name">جاري التحميل...</span></p>
+
+<p><strong>تاريخ الشراء:</strong> <span id="purchase_date">جاري التحميل...</span></p>
+
+<p><strong>مدة الضمان:</strong> 5 سنوات</p>
+
+<p><strong>المتبقي من الضمان:</strong> <span id="warranty">---</span></p>
+</div>
+
+<h3>سجل العمليات</h3>
+
+<table>
+<tr>
+<th>التاريخ</th>
+<th>العملية</th>
+<th>الملاحظات</th>
+</tr>
+
+<tr>
+<td>---</td>
+<td>---</td>
+<td>---</td>
+</tr>
+
+</table>
+
+<div class="footer">
+
+<h3>تواصل معنا</h3>
+
+<p>المبيعات: 07762040877</p>
+
+<p>الصيانة: 07821684840</p>
+
+<p><a href="https://www.instagram.com/roboiraq/" target="_blank">Instagram</a></p>
+
+<p><a href="https://www.facebook.com/roboiraq/" target="_blank">Facebook</a></p>
+
+<p><a href="https://www.youtube.com/@Roboiraq_1" target="_blank">YouTube</a></p>
+
+<p>
+<a href="https://maps.app.goo.gl/zPFg6QHQqCqQTHoW6?g_st=aw" target="_blank">
+موقع الشركة
+</a>
+</p>
+
+</div>
+
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const supabaseUrl = "https://cqjtlxpzegcgjchsqfrc.supabase.co";
-const supabaseKey = "sb_publishable_LYObMpI_anGxdqlluQcjCA_aj4q0H7y";
 
-const client = supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseUrl =
+"https://cqjtlxpzegcgjchsqfrc.supabase.co";
 
-async function loadCustomer() {
+const supabaseKey =
+"sb_publishable_LYObMpI_anGxdqlluQcjCA_aj4q0H7y";
 
-  const { data, error } = await client
-    .from("customers")
-    .select("*")
-    .eq("card_code", "RB0001")
-    .single();
+const client =
+supabase.createClient(supabaseUrl,supabaseKey);
 
-  if (error || !data) {
-    document.getElementById("customer_name").innerText = "غير موجود";
-    return;
-  }
+async function loadCustomer(){
 
-  document.getElementById("customer_name").innerText =
-    data.customer_name || "";
+const { data, error } = await client
+.from("customers")
+.select("*")
+.eq("card_code","RB0001")
+.single();
 
-  document.getElementById("device_name").innerText =
-    data.device_name || "";
+if(error){
+document.getElementById("customer_name").innerText =
+"خطأ: " + error.message;
+return;
+}
 
-  document.getElementById("purchase_date").innerText =
-    data.purchase_date || "";
+if(!data){
+document.getElementById("customer_name").innerText =
+"العميل غير موجود";
+return;
+}
+
+document.getElementById("customer_name").innerText =
+data.customer_name || "";
+
+document.getElementById("device_name").innerText =
+data.device_name || "";
+
+document.getElementById("purchase_date").innerText =
+data.purchase_date || "";
+
 }
 
 loadCustomer();
+
 </script>
+
+</body>
+</html>
