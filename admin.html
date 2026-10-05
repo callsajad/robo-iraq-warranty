@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>روبو عراق - لوحة الموظفين</title>
+
+<style>
+body{
+font-family:Tahoma,Arial;
+background:#f5f5f5;
+padding:20px;
+}
+
+.card{
+max-width:700px;
+margin:auto;
+background:#fff;
+padding:25px;
+border-radius:20px;
+box-shadow:0 0 15px rgba(0,0,0,.1);
+}
+
+h1{
+text-align:center;
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin-top:10px;
+margin-bottom:15px;
+border:1px solid #ccc;
+border-radius:10px;
+}
+
+button{
+width:100%;
+padding:15px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-size:18px;
+}
+
+.save{
+background:#0a7cff;
+color:white;
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+
+<h1>روبو عراق - إضافة زبون</h1>
+
+<label>اسم الزبون</label>
+<input id="customer_name">
+
+<label>رقم الهاتف</label>
+<input id="phone_number">
+
+<label>نوع الجهاز</label>
+<select id="device_name">
+<option>Robot Vacuum Basic</option>
+<option>Robot Vacuum Pro</option>
+<option>Robot Vacuum Ultra</option>
+</select>
+
+<label>رقم الفاتورة</label>
+<input id="invoice_number">
+
+<button class="save">
+حفظ (نربطه بالقاعدة بالخطوة الجاية)
+</button>
+
+</div>
+
+</body>
+</html>
