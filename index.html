@@ -193,8 +193,42 @@ YouTube
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-alert("جاهز للربط");
+const supabaseUrl = "https://cqjtlxpzegcgjchsqfrc.supabase.co";
+const supabaseKey = "sb_publishable_LYObMpI_anGxdqlluQcjCA_aj4q0H7y";
+
+const client = supabase.createClient(supabaseUrl, supabaseKey);
+
+async function loadCustomer() {
+
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code") || "RB0001";
+
+  const { data, error } = await client
+    .from("customers")
+    .select("*")
+    .eq("card_code", code)
+    .single();
+
+  if (error || !data) {
+    document.getElementById("customer_name").innerText = "غير موجود";
+    return;
+  }
+
+  document.getElementById("customer_name").innerText =
+    data.customer_name || "";
+
+  document.getElementById("device_name").innerText =
+    data.device_name || "";
+
+  document.getElementById("purchase_date").innerText =
+    data.purchase_date || "";
+
+}
+
+loadCustomer();
 </script>
     
 </body>
