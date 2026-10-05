@@ -7,61 +7,66 @@
 
 <style>
 body{
-    font-family:Tahoma,Arial,sans-serif;
-    background:#f5f5f5;
-    margin:0;
-    padding:20px;
+font-family:Tahoma,Arial,sans-serif;
+background:#f5f5f5;
+margin:0;
+padding:20px;
 }
 
 .card{
-    max-width:1000px;
-    margin:auto;
-    background:white;
-    border-radius:20px;
-    padding:25px;
-    box-shadow:0 0 15px rgba(0,0,0,.1);
+max-width:1000px;
+margin:auto;
+background:white;
+border-radius:20px;
+padding:25px;
+box-shadow:0 0 15px rgba(0,0,0,.1);
 }
 
 .logo{
-    text-align:center;
+text-align:center;
 }
 
 .logo img{
-    width:120px;
+width:120px;
 }
 
-h1,h2{
-    text-align:center;
+h1,h2,h3{
+text-align:center;
 }
 
 .info{
-    background:#fafafa;
-    padding:15px;
-    border-radius:12px;
-    margin-bottom:20px;
+background:#fafafa;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+line-height:2;
+font-size:20px;
 }
 
 table{
-    width:100%;
-    border-collapse:collapse;
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
 }
 
 table th,
 table td{
-    border:1px solid #ddd;
-    padding:10px;
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
 }
 
 table th{
-    background:#eee;
+background:#eee;
 }
 
 .footer{
-    margin-top:30px;
+margin-top:30px;
+text-align:center;
 }
 
 a{
-    text-decoration:none;
+text-decoration:none;
 }
 </style>
 </head>
@@ -78,15 +83,37 @@ a{
 <h2>اشتري راحتك ويانة</h2>
 
 <div class="info">
-<p><strong>اسم العميل:</strong> <span id="customer_name">جاري التحميل...</span></p>
 
-<p><strong>نوع الجهاز:</strong> <span id="device_name">جاري التحميل...</span></p>
+<p>
+<strong>اسم العميل:</strong>
+<span id="customer_name">جاري التحميل...</span>
+</p>
 
-<p><strong>تاريخ الشراء:</strong> <span id="purchase_date">جاري التحميل...</span></p>
+<p>
+<strong>نوع الجهاز:</strong>
+<span id="device_name">جاري التحميل...</span>
+</p>
 
-<p><strong>مدة الضمان:</strong> 5 سنوات</p>
+<p>
+<strong>رقم الفاتورة:</strong>
+<span id="invoice_number">جاري التحميل...</span>
+</p>
 
-<p><strong>المتبقي من الضمان:</strong> <span id="warranty">---</span></p>
+<p>
+<strong>تاريخ الشراء:</strong>
+<span id="purchase_date">جاري التحميل...</span>
+</p>
+
+<p>
+<strong>مدة الضمان:</strong>
+<span id="warranty_months">جاري التحميل...</span>
+</p>
+
+<p>
+<strong>المتبقي من الضمان:</strong>
+<span id="remaining_warranty">جاري التحميل...</span>
+</p>
+
 </div>
 
 <h3>سجل العمليات</h3>
@@ -99,9 +126,9 @@ a{
 </tr>
 
 <tr>
-<td>---</td>
-<td>---</td>
-<td>---</td>
+<td id="service_date">---</td>
+<td id="service_action">شراء الجهاز</td>
+<td id="service_note">تم التسليم</td>
 </tr>
 
 </table>
@@ -111,14 +138,25 @@ a{
 <h3>تواصل معنا</h3>
 
 <p>المبيعات: 07762040877</p>
-
 <p>الصيانة: 07821684840</p>
 
-<p><a href="https://www.instagram.com/roboiraq/" target="_blank">Instagram</a></p>
+<p>
+<a href="https://www.instagram.com/roboiraq/" target="_blank">
+Instagram
+</a>
+</p>
 
-<p><a href="https://www.facebook.com/roboiraq/" target="_blank">Facebook</a></p>
+<p>
+<a href="https://www.facebook.com/roboiraq/" target="_blank">
+Facebook
+</a>
+</p>
 
-<p><a href="https://www.youtube.com/@Roboiraq_1" target="_blank">YouTube</a></p>
+<p>
+<a href="https://www.youtube.com/@Roboiraq_1" target="_blank">
+YouTube
+</a>
+</p>
 
 <p>
 <a href="https://maps.app.goo.gl/zPFg6QHQqCqQTHoW6?g_st=aw" target="_blank">
@@ -151,15 +189,11 @@ const { data, error } = await client
 .eq("card_code","RB0001")
 .single();
 
-if(error){
-document.getElementById("customer_name").innerText =
-"خطأ: " + error.message;
-return;
-}
+if(error || !data){
 
-if(!data){
 document.getElementById("customer_name").innerText =
 "العميل غير موجود";
+
 return;
 }
 
@@ -169,8 +203,52 @@ data.customer_name || "";
 document.getElementById("device_name").innerText =
 data.device_name || "";
 
+document.getElementById("invoice_number").innerText =
+data.invoice_number || "";
+
 document.getElementById("purchase_date").innerText =
 data.purchase_date || "";
+
+document.getElementById("warranty_months").innerText =
+(data.warranty_months || 0) + " شهر";
+
+document.getElementById("service_date").innerText =
+data.purchase_date || "";
+
+const purchaseDate =
+new Date(data.purchase_date);
+
+const endDate =
+new Date(purchaseDate);
+
+endDate.setMonth(
+endDate.getMonth() +
+(data.warranty_months || 12)
+);
+
+const now = new Date();
+
+if(now >= endDate){
+
+document.getElementById("remaining_warranty").innerText =
+"انتهى الضمان";
+
+}else{
+
+let months =
+(endDate.getFullYear()-now.getFullYear())*12 +
+(endDate.getMonth()-now.getMonth());
+
+let years =
+Math.floor(months/12);
+
+let remMonths =
+months%12;
+
+document.getElementById("remaining_warranty").innerText =
+years + " سنة و " + remMonths + " شهر";
+
+}
 
 }
 
