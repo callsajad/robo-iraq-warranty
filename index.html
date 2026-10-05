@@ -203,14 +203,11 @@ const client = supabase.createClient(supabaseUrl, supabaseKey);
 
 async function loadCustomer() {
 
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code") || "RB0001";
-
-  const { data, error } = await client
-    .from("customers")
-    .select("*")
-    .eq("card_code", code)
-    .single();
+ const { data, error } = await client
+  .from("customers")
+  .select("*")
+  .eq("id", "5ff25cc6-4cb5-4220-b307-d6ad0f1b8")
+  .single();
 
   if (error || !data) {
     document.getElementById("customer_name").innerText = "غير موجود";
